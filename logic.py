@@ -10,7 +10,7 @@ class Logic:
         # Clear previous corrections
         gui_instance.correction_label.setText("")
 
-
+        # get student name and grade
         for row in range(gui_instance.table.rowCount()):
             student_name_item = gui_instance.table.item(row, 0)
             grade_item = gui_instance.table.item(row, 1)
@@ -18,13 +18,14 @@ class Logic:
             student_name = student_name_item.text().strip()
             grade_text = grade_item.text()
 
+            #invalid inputs
             if student_name == "":
                 gui_instance.correction_label.setText("Student name cannot be empty.")
                 return
             if student_name in self.student_data:
                 gui_instance.correction_label.setText("Duplicate student names.")
                 return
-
+            #invalid inputs
             try:
                 grade = int(grade_text)
                 if grade < 0:
@@ -49,17 +50,15 @@ class Logic:
             'F': max_grade - 50
         }
 
-        print("step 2")
         with open(filename, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
             csv_writer.writerow(['Student Name', 'Grade', 'Adjusted Grade'])
-
-            print("step 3")
 
             for student_name, grade in self.student_data.items():
                 adjusted_grade = self.get_adjusted_grade(grade, grade_mapping)
                 csv_writer.writerow([student_name, grade, adjusted_grade])
 
+                #text box writting
                 gui_instance.text_box.append(f"{student_name} score is {grade} and grade is {adjusted_grade}\n")
 
     @staticmethod
